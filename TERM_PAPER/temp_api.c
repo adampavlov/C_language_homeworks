@@ -1,4 +1,9 @@
 #include <stdint.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include "temp_api.h"
 
 // Функция читает csv файл, записывает данные в структуру типа sensor и возвращает количество корректных сделанных записей в структуру
@@ -193,6 +198,49 @@ void One_Month_Stat(sensor *Sensor_Data, int Num_Records, int Month)
                     printf("------------------------------------------\n");
                 }
             }
+        }
+    }
+}
+
+// Читает аргументы командной строки.
+void Read_argv(int argc, char *argv[], char *filename, int *month)
+{
+    int res;
+    // Обходим все аргументы командной строки
+    while ((res = getopt(argc, argv, "hHf::m::")) != -1)
+    {
+        switch (res)
+        {
+        case 'h':
+        case 'H':
+            printf("        <HELPER MODE>\n THIS PROGRAMM PRINT STATISTIC OF TEMPERATURE FROM DOWNLOAD FILE.\n USE KEYS:\n");
+            printf("1) -h or -H - FOR HELPER;\n");
+            printf("2) -f<FILENAME> (-f:)- ENTER THE FILENAME FOR READ DATA AND GET YEAR STATISTC;\n");
+            printf("3) -m<MONTH NUMBER> (-m:)- ENTER THE MONTH NUMBER FOR GET STATISTIC ONLY;\n");
+            printf("\n");
+            printf("(EXAMPLE OF THERMINAL COMMAND: >>prog.exe -f<FILENAME.CSV> -m<MONTH NUMBER>)\n");
+            printf("------------------------------------------\n");
+            break;
+        case 'f':
+            if (optarg != NULL && optarg[0] != '-')
+            {
+                strncpy(filename, optarg, FILENAME_MAX_LENGTH);
+            }
+            else
+            {
+                fprintf(stderr, "ERROR: MISSING ARGUMENT FOR KEY -f\n");
+                exit(1);
+            }
+            break;
+        case 'm':
+            if (optarg != NULL && optarg[0] != '-')
+            {
+                *month = atoi(optarg);
+            }
+            break;
+        case '?':
+            fprintf(stderr, "ERROR: UNKNOWN ARGUMENTS!\n");
+            exit(1);
         }
     }
 }

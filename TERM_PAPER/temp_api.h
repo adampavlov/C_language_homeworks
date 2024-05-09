@@ -31,3 +31,5 @@ void Year_Stat(sensor *Sensor_Data, int Num_Records);
 int Count_Month(sensor *Sensor_Data, int Num_Records, int Month);
 // Функция вывода статистики помесячнов выбранном
 void Month_Stat(sensor *Sensor_Data, int Num_Records);
+// Читает аргументы командной строки.
+void Read_argv(int argc, char *argv[], char *filename, int *month);
